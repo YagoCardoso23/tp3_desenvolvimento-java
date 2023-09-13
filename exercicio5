@@ -1,0 +1,100 @@
+import java.util.LinkedList;
+
+// Classe CartaoWEB
+class CartaoWEB {
+    private String email;
+    private String nome;
+
+    public CartaoWEB(String email, String nome) {
+        if (isValidEmail(email)) {
+            this.email = email;
+        } else {
+            this.email = "email inválido";
+        }
+        this.nome = nome;
+    }
+
+    private boolean isValidEmail(String email) {
+        // Lógica de validação de email (simplificada)
+        return email != null && email.contains("@");
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+}
+
+// Interface MensagemCartao
+interface MensagemCartao {
+    String showMessage();
+}
+
+// Classes filhas
+class DiaDosNamorados extends CartaoWEB implements MensagemCartao {
+    public DiaDosNamorados(String email, String nome) {
+        super(email, nome);
+    }
+
+    @Override
+    public String showMessage() {
+        return "mensagem para: " + getEmail() + "\n" +
+               "Parabéns, " + getNome() + " pelo Dia dos Namorados.";
+    }
+}
+
+class Natal extends CartaoWEB implements MensagemCartao {
+    public Natal(String email, String nome) {
+        super(email, nome);
+    }
+
+    @Override
+    public String showMessage() {
+        return "mensagem para: " + getEmail() + "\n" +
+               "Feliz Natal, " + getNome() + ".";
+    }
+}
+
+class Aniversario extends CartaoWEB implements MensagemCartao {
+    public Aniversario(String email, String nome) {
+        super(email, nome);
+    }
+
+    @Override
+    public String showMessage() {
+        return "mensagem para: " + getEmail() + "\n" +
+               "Feliz Aniversário, " + getNome() + ".";
+    }
+}
+
+class Pascoa extends CartaoWEB implements MensagemCartao {
+    public Pascoa(String email, String nome) {
+        super(email, nome);
+    }
+
+    @Override
+    public String showMessage() {
+        return "mensagem para: " + getEmail() + "\n" +
+               "Feliz Páscoa, " + getNome() + ".";
+    }
+}
+
+// Classe Main
+public class Main {
+    public static void main(String[] args) {
+        LinkedList<MensagemCartao> cartoes = new LinkedList<>();
+
+        // Criar 5 cartões com pelo menos 1 de cada tipo
+        cartoes.add(new DiaDosNamorados("joao@example.com", "João"));
+        cartoes.add(new Natal("maria@example.com", "Maria"));
+        cartoes.add(new Aniversario("pedro@example.com", "Pedro"));
+        cartoes.add(new Pascoa("ana@example.com", "Ana"));
+        cartoes.add(new Aniversario("carlos@example.com", "Carlos"));
+
+        // Iterar usando Java 8 e imprimir as mensagens
+        cartoes.forEach(cartao -> System.out.println(cartao.showMessage()));
+    }
+}
