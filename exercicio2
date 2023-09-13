@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class DigitosPorExtensoUtil {
+    public static String digitosPorExtenso(int numero) {
+        String[] digitos = {"zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"};
+        String numeroPorExtenso = "";
+
+        while (numero > 0) {
+            int digito = numero % 10;
+            numeroPorExtenso = digitos[digito] + ", " + numeroPorExtenso;
+            numero /= 10;
+        }
+
+        // Remover a vírgula extra no final
+        if (!numeroPorExtenso.isEmpty()) {
+            numeroPorExtenso = numeroPorExtenso.substring(0, numeroPorExtenso.length() - 2);
+        }
+
+        return numeroPorExtenso;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Digite um número inteiro: ");
+        int numero = scanner.nextInt();
+
+        String numeroPorExtenso = digitosPorExtenso(numero);
+        System.out.println("Resultado: " + numeroPorExtenso);
+
+        scanner.close();
+    }
+}
