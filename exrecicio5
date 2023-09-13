@@ -1,0 +1,169 @@
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+// Classe para representar as cédulas
+class Cedula {
+    private String nome;
+    private int valor;
+
+    public Cedula(String nome, int valor) {
+        this.nome = nome;
+        this.valor = valor;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getValor() {
+        return valor;
+    }
+}
+
+// Classe para representar um cliente bancário
+class Cliente {
+    private String nome;
+    private List<String> emails;
+    private String seguroSocial;
+    private String logradouro;
+    private String numero;
+    private String bairro;
+    private String cidade;
+    private String zipCode;
+    private BigDecimal saldo;
+
+    public Cliente(String nome, List<String> emails, String seguroSocial, String logradouro, String numero, String bairro, String cidade, String zipCode, BigDecimal saldo) {
+        this.nome = nome;
+        this.emails = emails;
+        this.seguroSocial = seguroSocial;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.zipCode = zipCode;
+        this.saldo = saldo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public List<String> getEmails() {
+        return emails;
+    }
+
+    public String getSeguroSocial() {
+        return seguroSocial;
+    }
+
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void depositar(BigDecimal valor) {
+        if (valor.compareTo(BigDecimal.ZERO) > 0) {
+            saldo = saldo.add(valor);
+            System.out.println("Depósito realizado com sucesso. Novo saldo: " + saldo);
+        } else {
+            System.out.println("Valor de depósito inválido.");
+        }
+    }
+
+    public void sacar(int valor) {
+        if (valor > 0 && valor <= saldo.intValue()) {
+            // Lógica para entregar as cédulas
+            int notas50 = valor / 50;
+            int notas10 = (valor % 50) / 10;
+            int notas5 = ((valor % 50) % 10) / 5;
+            int notas1 = ((valor % 50) % 10) % 5;
+
+            System.out.println("Notas entregues:");
+            System.out.println(notas50 + " de B$50");
+            System.out.println(notas10 + " de B$10");
+            System.out.println(notas5 + " de B$5");
+            System.out.println(notas1 + " de B$1");
+
+            BigDecimal novoSaldo = saldo.subtract(BigDecimal.valueOf(valor));
+            saldo = novoSaldo;
+        } else {
+            System.out.println("Valor de saque inválido.");
+        }
+    }
+}
+
+// Classe para representar um cliente padrão
+class StandardCustomer extends Cliente {
+    public StandardCustomer(String nome, List<String> emails, String seguroSocial, String logradouro, String numero, String bairro, String cidade, String zipCode, BigDecimal saldo) {
+        super(nome, emails, seguroSocial, logradouro, numero, bairro, cidade, zipCode, saldo);
+    }
+}
+
+// Classe para representar um cliente VIP
+class VipCustomer extends Cliente {
+    public VipCustomer(String nome, List<String> emails, String seguroSocial, String logradouro, String numero, String bairro, String cidade, String zipCode, BigDecimal saldo) {
+        super(nome, emails, seguroSocial, logradouro, numero, bairro, cidade, zipCode, saldo);
+    }
+
+    @Override
+    public void sacar(int valor) {
+        if (valor > 0 && valor <= saldo.intValue()) {
+            if (valor < 50) {
+                // Lógica para perguntar ao cliente
+                System.out.println("Deseja receber o valor com notas de B$5 e B$1? (S/N)");
+                // Implemente aqui a lógica para perguntar ao cliente
+
+                // Suponhamos que o cliente escolheu usar notas de B$5 e B$1
+                int notas5 = valor / 5;
+                int notas1 = valor % 5;
+                System.out.println("Notas entregues:");
+                System.out.println(notas5 + " de B$5");
+                System.out.println(notas1 + " de B$1");
+
+                BigDecimal novoSaldo = saldo.subtract(BigDecimal.valueOf(valor));
+                saldo = novoSaldo;
+            } else {
+                super.sacar(valor);
+            }
+        } else {
+            System.out.println("Valor de saque inválido.");
+        }
+    }
+}
+
+// Classe Main para testar a lógica
+public class Main {
+    public static void main(String[] args) {
+        // Criar clientes
+        Cliente clientePadrao = new StandardCustomer("Cliente Padrão", new ArrayList<>(), "123456789", "Rua A", "123", "Bairro A", "Cidade A", "12345", new BigDecimal("1000.00"));
+        Cliente clienteVip = new VipCustomer("Cliente VIP", new ArrayList<>(), "987654321", "Rua B", "456", "Bairro B", "Cidade B", "54321", new BigDecimal("5000.00"));
+
+        // Realizar depósitos
+        clientePadrao.depositar(new BigDecimal("500.00"));
+        clienteVip.depositar(new BigDecimal("1000.00"));
+
+        // Realizar saques
+        clientePadrao.sacar(150);
+        clienteVip.sacar(75);
+    }
+}
